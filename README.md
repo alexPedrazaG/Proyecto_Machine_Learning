@@ -18,14 +18,14 @@ El objetivo de este proyecto es realizar un preprocesamiento de los datos propor
 
 │   │   └── df_clasificacion.csv # Es el resultado de aplicar 02_Preproceso.ipynb
 
-│
+
 ├── models
 
 │   │   └── modelo_regresion.pkl # Modelo de regresión lineal entrenado para predicción de nota_final
 
 │   │   └── modelo_clasificacion.pkl # Modelo de Regresión Logística entrenado para predicción de aprobado/suspenso
 
-│
+
 ├── notebooks
 
 │   │   └── 01_LimpiezaDatos_EDA.ipynb   # Limpieza de datos, análisis exploratorio y detección de inconsistencias (EDA)
