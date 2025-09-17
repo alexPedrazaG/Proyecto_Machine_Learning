@@ -5,22 +5,36 @@ El objetivo de este proyecto es realizar un preprocesamiento de los datos propor
 
 ## 🗂️ Estructura del Proyecto
 ├── data
+
 	├── raw
+	
 │   │   └── dataset_estudiantes.csv # Se encuentra el fichero de análisis proporcionado por la escuela
+
 	├── processed
+	
 │   │   └── dataset_estudiantes_clean.csv # Es el resultado de aplicar 01_LimpiezaDatos_EDA.ipynb
+
 │   │   └── df_regresion.csv # Es el resultado de aplicar 02_Preproceso.ipynb
+
 │   │   └── df_clasificacion.csv # Es el resultado de aplicar 02_Preproceso.ipynb
+
 │
 ├── models
 │   │   └── modelo_regresion.pkl # Modelo de regresión lineal entrenado para predicción de nota_final
+
 │   │   └── modelo_clasificacion.pkl # Modelo de Regresión Logística entrenado para predicción de aprobado/suspenso
+
 │
 ├── notebooks
+
 │   └── 01_LimpiezaDatos_EDA.ipynb   # Limpieza de datos, análisis exploratorio y detección de inconsistencias (EDA)
+
 │   └── 02_Preproceso.ipynb    # Preprocesamiento de variables, codificación, escalado y gestión de outliers 
+
 │   └── 03_Regresion.ipynb    # Construcción, entrenamiento y evaluación del modelo de regresión para predecir nota_final 
+
 │   └── 04_Clasificacion.ipynb    # Construcción, entrenamiento y evaluación del modelo de clasificación para predecir aprobado/suspenso
+
 ├── README.md # Descripción del proyecto
 
 ## 🛠️ Instalación y Requisitos
@@ -66,7 +80,9 @@ Este último se tomará como origen en el fichero '02_Preproceso.ipynb' para rea
 ### 2. 01_LimpiezaDatos_EDA
 
 **EDA**  
+
 **Importar librerías**
+
 Importamos las librerías necesarias para hacer nuestro análisis:
 
 ##### Manipulación de datos
@@ -86,6 +102,7 @@ Importamos las librerías necesarias para hacer nuestro análisis:
 Se utiliza la opcion 'display.max_columns' para ver todas columnas del fichero. Se carga el fichero de origen en 'df_raw' y se realiza un 'head' para ver que contiene los datos.
 
 **Análisis Exploratorio**  
+
 Se utiliza el atributo 'shape' para saber que el fichero contiene 1000 filas y 11 columnas. También se usa 'info' para tener una informacion general del fichero. Se ve que hay 7 columnas númericas (5 de ellas tipo float y 2 como int) y 4 categóricas. Además que las columnas 'horas_sueno', 'horario_estudio_preferido' y 'estilo_aprendizaje' poseen nulos. 
 
 Se realiza una copia del dataFrame en uno nuevo ('df') para dejar sin modificar el fichero original. 
@@ -94,16 +111,22 @@ Se hace un 'round(2)' para las columnas numéricas ya que en la vista previa del
 
 En el siguiente paso, se describen las columnas.
 
+
 **Verificación de duplicados**  
+
 Se usa el atributo 'duplicated' y 'sum' para verificar duplicados; no se detectaron registros duplicados.
 
+
 **Verificación y manejo de nulos**
+
 Se hace un 'isna().sum' para identificar los valores nulos. Como se mencionó antes, existen nulos en tres columnas: 
 - 'horas_sueno' (150 nulos)
 - 'horario_estudio_preferido' (100 nulos)
 - 'estilo_aprendizaje' (50 nulos).
 
+
 **Identificar variables categóricas y numéricas**
+
 Se indentifican las columnas categóricas y las numéricas para aplicar funciones específicas más adelante.
 
 - Columnas numéricas: ['horas_estudio_semanal', 'nota_anterior', 'tasa_asistencia', 'horas_sueno', 'edad', 'nota_final', 'aprobado']
@@ -114,12 +137,16 @@ Para 'horas_sueno' (numérica), se utiliza KNNImputer, preservando patrones entr
 
 Se verifica nuevamente que los nulos han desaparecido y se crea una función para eliminar tildes en 'nivel_dificultad' y 'tiene_tutor', evitando problemas futuros.
 
+
 **Variables numéricas**
 
-**Estadísticas descriptivas**  
+**Estadísticas descriptivas** 
+ 
 Se realiza un 'describe().T' para mostrar las estadísticas descriptivas de forma legible. No se detecta nada fuera de lo común.
 
+
 **Visualizaciones**
+
 Se realiza un 'histplot' para cada variable numérica (25 grupos):
 
 *1. Distribución de horas_estudio_semanal:*
@@ -143,9 +170,11 @@ Distribución centrada entre 62% y 80%. Más aprobados que suspensos.
 *7. Distribución de aprobado:*
 Mayor número de aprobados que suspensos.
 
+
 **Variables categóricas**
 
 **Estadísticas descriptivas** 
+
 Se aplica un 'describe().T'. Todas las columnas tienen 1000 registros:
 
 - 'nivel_dificultad', 3 categorías, predominando "Medio" (504 estudiantes)
@@ -153,10 +182,14 @@ Se aplica un 'describe().T'. Todas las columnas tienen 1000 registros:
 - 'horario_estudio_preferido', 4 categorías, predominando "Noche" (344 estudiantes).
 - 'estilo_aprendizaje', 5 categorías, predominando "Visual" (363 estudiantes).
 
+
 **Valores únicos y frecuencias**
+
 Se itera sobre 'cat_cols' para mostrar valores únicos y frecuencia de cada uno.
 
+
 **Visualizaciones**
+
 Se genera un gráfico de barras para cada variable categórica, ajustando dinámicamente la anchura (mín. 7, máx. 25):
 
 *1. Distribución de nivel_dificultad:* Predomina "Medio", seguido de "Fácil" y "Difícil".
@@ -167,7 +200,9 @@ Se genera un gráfico de barras para cada variable categórica, ajustando dinám
 
 *4. Distribución de estilo_aprendizaje:* Predomina "Visual", seguido de "Auditivo", "Kinestésico", "Lectura/Escritura" y "Desconocido" (50 estudiantes).
 
+
 **Matriz de Correlación**
+
 Se aplica la matriz de correlación para las variables numéricas utilizando el atributo 'corr', mostrando únicamente la parte triangular para evitar duplicados. No hay ninguna correlacion alta o media alta.Hay algunas correlaciones moderadas:
 - Entre 'aprobado' y 'nota_final', lo cual tiene sentido: a mayor 'nota_final', más probable es que el estudiante esté aprobado.
 - Entre 'nota_final' y 'horas_estudio_semanal', indicando que a mayor número de horas de estudio semanal, mayor suele ser la nota.
@@ -176,11 +211,15 @@ Se aplica la matriz de correlación para las variables numéricas utilizando el 
 
 Existen algunas correlaciones bajas entre otras variables y algunas correlaciones negativas, pero son prácticamente nulas.
 
+
 **Relaciones Cruzadas**
+
 
 **1. Variable objetivo nota_final**
 
+
 ***Variables numéricas***
+
 Se genera un gráfico de dispersión por cada variable numérica. En el eje x se encuentra la variable de estudio, en el eje y la variable objetivo 'nota_final'. Además, se ha incluido la variable 'aprobado' con otro color para visualizar mejor la relación entre tres variables.
 
 *1. Horas_estudio_semanal:*
@@ -202,7 +241,9 @@ No se observan patrones destacables; los valores están bastante equilibrados.
 *6. Aprobado:*
 Para aprobar se requiere superar el 60% de la nota final. Se confirma que hay más aprobados que suspensos.
 
+
 ***Variables categóricas***
+
 Se crean gráficos de bigotes por cada columna. En el eje x está la variable de estudio y en el eje y la variable objetivo. Se agrupan por la variable de estudio y se ordenan según la media de la variable objetivo.
 
 *1. Nivel_dificultad:*
@@ -217,7 +258,9 @@ Todas las categorías muestran una media de notas similar. Destaca que los alumn
 *4. Estilo_aprendizaje:*
 Resultados similares a los anteriores. El mejor promedio se observa en la categoría 'Lectura/Escritura'.
 
+
 **2. Variable objetivo aprobado**
+
 Se genera un histograma si las variables son numéricas o un countplot si son categóricas. En el eje x está la variable de estudio y en el eje y la variable objetivo.
 
 *1. Horas_estudio_semanal:*
@@ -250,7 +293,9 @@ Destaca que los estudiantes con estilo de aprendizaje 'Visual' tienen un mejor d
 *10. Nota_final:*
 Los estudiantes que superan el 60% aprueban; los que no, suspenden. Se observa que los estudiantes que obtienen exactamente 60% presentan más suspensos que aprobados, lo que indica que se evalúa alguna otra variable para decidir la aprobación final.
 
+
 **Análisis de Inconsistencias**
+
 Se añadieron reglas para identificar posibles inconsistencias y así eliminarlas para no afectar el análisis. Se creó una lista vacía para ir almacenando las inconsistencias detectadas. Las reglas fueron:
 
 1. 'Horas_estudio_semanal' no podía superar las 60 horas semanales.
@@ -260,7 +305,9 @@ Se añadieron reglas para identificar posibles inconsistencias y así eliminarla
 
 Al finalizar, la lista de inconsistencias resultó vacía, confirmando que no había datos fuera de rango.
 
+
 **Export fichero limpio**
+
 Se exporta el fichero limpio para los siguientes pasos del análisis. Se guarda con el nombre 'dataset_estudiantes_clean.csv' en la ruta ../data/processed/.
 
 ### 3. 02_Preproceso
@@ -283,15 +330,21 @@ Importamos las librerías necesarias para hacer nuestro análisis:
 
 Se utiliza la opcion 'display.max_columns' para ver todas columnas del fichero. Se Carga el fichero de origen en 'df_raw' y se realiza un 'head' para ver que contiene los datos.
 
+
 **Carga de datos**  
+
 Se cargan los datos de fichero que se exportó anteriormente con los datos limpios. El fichero se llama 'dataset_estudiantes_clean.csv'
 
+
 **Gestión de Outliers**
+
 Se realizado un Boxplot por cada variable númerica del fichero manteniendo la columna 'Aprobado'. Al ser una variable binaria se decidió no tenerla en cuenta en el estudio de los outliers, porque no tiene sentido visualmente; sin embargo, en el siguiente paso es útil para ver si los outliers aprueban. Se calcula el número de gráficos y el número de columnas, ajustando el tamaño de manera dinámica.
 
 Al analizar los outliers no vemos que nos esten sesgando los datos de estudio, por lo que entendemos que no va a afectar a la hora de aplicar algún método de marchine learning.
 
+
 **Detección de outliers mediante el método IQR**
+
 Se crea un diccionario para almacenar toda la información de forma organizada. Se calcula el índice intercuartílico para visualizar los outliers. Se definen dos límites (1.5 por encima del cuartil 3 y 1.5 por debajo del cuartil 1), y los datos que quedan fuera de estos límites se consideran outliers. Sólo tenemos 3 variables con outliers:
 
 *1. horas_estudio_semanal:*  
@@ -303,19 +356,24 @@ Se encuentran otros 4 estudiantes con la tasa de asistencia más baja. No parece
 *3. nota_final:*  
 Aparecen outliers en ambos extremos: 2 con la nota más alta y 3 con las notas más bajas. Estos últimos dedicaron pocas horas de estudio comparados con los compañeros que aprobaron. Como mencionamos, estos outliers no afectan significativamente al análisis.
 
+
 **Detección de outliers mediante el método Z-score**
+
 Otra forma de analizar los outliers es utilizando el 'Z-score'. Se buscan los que están a más de 3 desviaciones estándar de la media y aparecen 4 outliers: 
 - 2 estudiantes dedicando 25 'horas_estudio_semanal'.
 - 2 alumnos con las 'nota_final' más bajas con un 30% y un 40%.
 
 Como se dijo en caso anterior no sse van a eliminar esos registros porque no están afectando a los datos de estudio.
 
+
 **Regresión**
 
 *La variable objetivo es nota_final*
 Se ha creado una copia del dataFrame 'df_reg' para trabajar con ese y no modificar el 'df_clean'. Además se define la variable objetivo 'nota_final'.
 
+
 **Codificación**
+
 El objetivo es convertir las variables categóricas en valores numéricos.
 
 *1. OrdinalEncoder*
@@ -326,15 +384,21 @@ Se utiliza 'OneHotEncoder' para variables nominales sin orden: 'horario_estudio_
 
 Para mantener el preprocesamiento del estudio de los dos modelos (regresión y clasificación) se realiza una copia del dataframe antes de hacer el siguiente paso.
 
+
 **Escalado**
+
 
 *MinMaxScaler*
 Se realiza un escalado de los datos para que todas la variables se encuentren en la misma escala entre 0 y 1 menos la variable objetivo 'nota_final'
 
+
 **Clasificación**
+
 Se realiza lo mismo que en el paso anterior pero ahora excluyendo la variable 'aprobado'
 
+
 **Guardar Dfs preprocesados**
+
 Se guarda 'df_regresion.csv' en la carpeta '../data/processed' para su posterior uso. Se hace lo mismo con 'df_clasificacion.csv'
 
 ### 4. 03_Regresión
@@ -375,7 +439,9 @@ pd.set_option('display.max_columns', None)
 ##### Métricas de evaluación
 - sklearn.metrics (r2_score, mean_squared_error, mean_absolute_error)
 
+
 **Carga de datos**  
+
 Se cargan los datos preprocesados del fichero 'df_regresion.csv'
 
 *Separación del conjunto de datos*
@@ -383,8 +449,11 @@ Se separa la variable 'nota_final' de las variables predictoras. Luego, se divid
 - Tamaño del conjunto de entranmiento: (800, 17)
 - Tamaño del conjunto de prueba: (200, 17)
 
+
 **Entrenamiento del modelo**  
+
 Se entrena el modelo con 'LinearRegression', pasando las variables predictoras y la respuesta. Luego se predicen nuevos valores con 'predict'.
+
 
 **Validación del modelo**  
 
@@ -394,10 +463,14 @@ Se grafica la predicción frente a los valores reales. Se añade una línea diag
 *Comparación de distribuciones*
 Se comparan las distribuciones reales y predichas mediante histogramas. Los resultados son similares, pero se observan algunas diferencias.
 
+
 **Residuos**  
+
 Los residuos son la diferencia entre valores reales y predichos. Se visualizan en scatterplots e histogramas. Idealmente deberían centrarse en 0. Se observa un pico en torno a 0 y errores menos frecuentes a mayor magnitud, lo cual es normal.
 
+
 **Importancia de las caracterísitcas** 
+
 Se calcula la importancia mediante los coeficientes lineales. Destacan:
 - 'aprobado': mayor coeficiente, coherente con los estudiantes aprobados que tienen 'nota_final' > 60%.
 - 'horas_estudio_semanal': más horas → mayor nota.
@@ -406,7 +479,9 @@ Se calcula la importancia mediante los coeficientes lineales. Destacan:
 
 Se añade un gráfico de barras para visualizar la importancia de manera clara.
 
+
 **Métricas**
+
 Se evalúa desempeño en entrenamiento y prueba:
 - *R²*: no es muy alto por lo que hay bastante variabilidad que el modelo no captura. La diferencia train y test no es muy grande, indica que no hay un sobreajuste fuerte, aunque el modelo tampoco tiene mucha capacidad predictiva.
 - *MAE y RMSE*: Los errores son homogéneos y no hay valores extremos desproporcionados.
@@ -422,7 +497,9 @@ Posteriormente, se entrenó el 'RandomForest' con parámetros optimizados para r
 
 En conclusión, el modelo mejorado es más potente y flexible, pero la información contenida en las features actuales sigue limitando el R² en el conjunto de prueba.
 
+
 **Entrenamiento final**
+
 Se entrena el modelo final utilizando todo el conjunto de datos, de manera que aproveche toda la información disponible para ajustar los coeficientes. Una vez entrenado, se guarda el modelo en un archivo llamado 'modelo_regresion.pkl' usando joblib.dump. Esto permite preservar el modelo entrenado y reutilizarlo en producción sin necesidad de volver a entrenarlo, asegurando que las predicciones futuras se realicen con el mismo modelo.
 
 Además, Se probaron varios modelos de regresión lineal con técnicas de regularización (Ridge, Lasso y ElasticNet) para mejorar la capacidad predictiva del modelo inicial.
@@ -433,7 +510,9 @@ Además, Se probaron varios modelos de regresión lineal con técnicas de regula
 
 En general, ninguna de estas técnicas de regularización superó el rendimiento del modelo lineal simple. Por ello, se decidió finalmente utilizar el RandomForestRegressor optimizado con interacciones, que mostró un mejor desempeño en entrenamiento (R² train 0.66) y mantuvo una generalización estable en test (R² test 0.47), ofreciendo un equilibrio entre ajuste y capacidad predictiva superior a los modelos lineales.
 
+
 **Resultados**
+
 El modelo lineal simple explicó parte de la varianza (R² test ≈ 0.49).
 El RandomForest con interacciones mejoró el ajuste en entrenamiento (R² train ≈ 0.66), pero el R² en test se mantuvo limitado (≈ 0.47).
 Las variables más influyentes fueron: 'aprobado', 'horas_estudio_semanal', 'nota_anterior' y 'tasa_asistencia'.
@@ -465,7 +544,9 @@ pd.set_option('display.max_columns', None)
 - sklearn.metrics (confusion_matrix, ConfusionMatrixDisplay)
 - sklearn.metrics (accuracy_score, precision_score, recall_score, f1_score)
 
+
 **Carga de datos**  
+
 Se cargan los datos de fichero que se exportó anteriormente con el preprocesamiento hecho, el fichero se llama 'df_clasificacion.csv'
 
 *Separación del conjunto de datos*
@@ -474,17 +555,23 @@ A continuación, se divide el dataset en entrenamiento (80%) y prueba (20%) util
 - Tamaño del conjunto de entranmiento: (800, 17)
 - Tamaño del conjunto de prueba: (200, 17)
 
+
 **Entrenamiento del modelo**  
+
 Se entrena el modelo de regresión logística usando el conjunto de entrenamiento, pasando como argumentos las variables predictoras y la variable objetivo 'aprobado'. Después, se obtienen las predicciones con 'predict. Asimismo, se utiliza 'predict_proba' para obtener las probabilidades de que cada estudiante apruebe o suspenda, lo que permite analizar la certeza de las predicciones del modelo.
 
+
 **Validación del modelo**  
+
 Se utiliza una matriz de confusión para evaluar el rendimiento. En el conjunto de prueba de 200 estudiantes:
 - El modelo acertó con 192 estudiantes: 185 que aprueban y 7 que suspenden correctamente.
 - Hubo 8 falsos positivos, es decir, estudiantes que suspendieron pero que el modelo predijo que aprobarían.
 
 Esta matriz permite identificar errores específicos del modelo y analizar si existe un sesgo hacia la clase mayoritaria (aprobados).
 
+
 **Métricas**
+
 Se calculan las métricas de desempeño tanto para el conjunto de entrenamiento como para el de prueba:
 - *Train Accuracy*: El modelo acierta en un 92% de los casos de entrenamiento
 - *Train Precission*: Cuando predice positivo, acierta en un 92%
@@ -507,7 +594,9 @@ El modelo generaliza muy bien: las métricas en test son incluso ligeramente mej
 Gracias a la ponderación, se confirma que el modelo mantiene buen rendimiento incluso con clases desbalanceadas, no solo optimizando para la clase mayoritaria.
 El hecho de que train tenga un F1 un poco menor (0.90 vs 0.95 en test) probablemente se deba a variabilidad en el split (quizás en train había más ejemplos complicados de la clase minoritaria).
 
+
 **Importancia de las caracterísitcas** 
+
 Se mide la importancia de las características utilizando los coeficientes lineales del modelo de regresión logística.
 
 - La variable más influyente es 'nota_final', lo que tiene sentido, ya que la mayoría de los estudiantes que superan el 60% de la nota final aprueban.
@@ -515,10 +604,14 @@ Se mide la importancia de las características utilizando los coeficientes linea
 
 Además se añade también un gráfico de barras para ver el resultado de manera más visual.
 
+
 **Entrenamiento final**
+
 Tas entrenar el modelo de clasificación con todo el conjunto de datos, se guardó en 'modelo_clasificacion.pkl' mediante 'joblib.dump', lo que permite reutilizarlo en producción sin necesidad de volver a entrenarlo.
 
+
 **Comparativa de variantes de regresión logística con regularización**
+
 Se evaluaron tres variantes para mejorar la capacidad predictiva y la estabilidad:
 
 *1. Logistic (L2 – Ridge)*
@@ -532,7 +625,9 @@ Muestra resultados similares a Lasso: accuracy de 0.89 en entrenamiento y 0.92 e
 
 En conclusión, entre las tres variantes evaluadas, la regresión logística con regularización L2 (Ridge) se posiciona como la mejor opción, al ofrecer el mayor rendimiento en el conjunto de prueba (Accuracy 0.96, F1 0.95) y una excelente capacidad de generalización.
 
+
 **Resultados**
+
 El modelo de regresión logística alcanzó un rendimiento excelente.
 Accuracy: 92% en train y 96% en test.
 Precision / Recall / F1-score: Todos muy altos, incluso con la clase desbalanceada (89.8% aprobados vs 10.2% suspensos).
