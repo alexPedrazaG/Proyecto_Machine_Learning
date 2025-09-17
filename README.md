@@ -20,6 +20,7 @@ El objetivo de este proyecto es realizar un preprocesamiento de los datos propor
 
 │
 ├── models
+
 │   │   └── modelo_regresion.pkl # Modelo de regresión lineal entrenado para predicción de nota_final
 
 │   │   └── modelo_clasificacion.pkl # Modelo de Regresión Logística entrenado para predicción de aprobado/suspenso
@@ -27,13 +28,13 @@ El objetivo de este proyecto es realizar un preprocesamiento de los datos propor
 │
 ├── notebooks
 
-│   └── 01_LimpiezaDatos_EDA.ipynb   # Limpieza de datos, análisis exploratorio y detección de inconsistencias (EDA)
+│   │   └── 01_LimpiezaDatos_EDA.ipynb   # Limpieza de datos, análisis exploratorio y detección de inconsistencias (EDA)
 
-│   └── 02_Preproceso.ipynb    # Preprocesamiento de variables, codificación, escalado y gestión de outliers 
+│   │   └── 02_Preproceso.ipynb    # Preprocesamiento de variables, codificación, escalado y gestión de outliers 
 
-│   └── 03_Regresion.ipynb    # Construcción, entrenamiento y evaluación del modelo de regresión para predecir nota_final 
+│   │   └── 03_Regresion.ipynb    # Construcción, entrenamiento y evaluación del modelo de regresión para predecir nota_final 
 
-│   └── 04_Clasificacion.ipynb    # Construcción, entrenamiento y evaluación del modelo de clasificación para predecir aprobado/suspenso
+│   │   └── 04_Clasificacion.ipynb    # Construcción, entrenamiento y evaluación del modelo de clasificación para predecir aprobado/suspenso
 
 ├── README.md # Descripción del proyecto
 
